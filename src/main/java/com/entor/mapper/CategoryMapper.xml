@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Category">
+
+
+	<select id="queryById" resultType="User">
+		select * from category where
+		id = #{id}
+	</select>
+
+	<insert id="add" parameterType="User">
+		<selectKey keyProperty="id" resultType="int" order="AFTER">
+			select LAST_INSERT_ID()
+		</selectKey>
+		insert into category(id,name) values(#{id},#{name})
+	</insert>
+
+	<delete id="deleteById">
+		delete from category where id = #{id}
+	</delete>
+
+	<select id="queryByPage" parameterType="map"
+		resultType="Category">
+		select * from category order by id limit
+		#{start},#{pageSize}
+	</select>
+	<select id="getTotals" resultType="int">
+		select count(*) from category
+	</select>
+	<update id="update" parameterType="User">
+		update category
+		<trim prefix="set" suffixOverrides=",">
+			<if test="username!=null and username!=''">
+				username = #{username},
+			</if>
+			<if test="password!=null and password!=''">
+				password = #{password},
+			</if>
+		</trim>
+		where id = #{id}
+		<!-- update user set username = #{username},password = #{password} where 
+			id = #{id} -->
+	</update>
+</mapper>
